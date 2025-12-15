@@ -1,0 +1,200 @@
+import os
+from flask import Flask, jsonify, request
+from flask_cors import CORS
+from datetime import datetime
+import json
+
+app = Flask(__name__)
+CORS(app)  # Enable CORS for Angular frontend
+
+UPLOAD_FOLDER = os.path.expanduser("~/Documents/E-commerce-Project/var/log/ecommerce")
+METADATA_FILE = os.path.expanduser("~/Documents/E-commerce-Project/var/log/files_metadata.json")
+os.makedirs(UPLOAD_FOLDER, exist_ok=True)
+
+# Load/Save metadata functions
+def load_metadata():
+    if os.path.exists(METADATA_FILE):
+        with open(METADATA_FILE, 'r') as f:
+            return json.load(f)
+    return []
+
+def save_metadata(data):
+    with open(METADATA_FILE, 'w') as f:
+        json.dump(data, f, indent=2, default=str)
+'''
+@app.route("/api/upload", methods=["POST"])
+def upload_log():
+    if "logfile" not in request.files:
+        return jsonify({"message": "No file uploaded"}), 400
+
+    file = request.files["logfile"]
+    filepath = os.path.join(UPLOAD_FOLDER, file.filename)
+    file.save(filepath)
+
+    return jsonify({"message": f"File {file.filename} uploaded successfully"}), 200
+'''
+
+@app.route("/api/upload", methods=["POST"])
+def upload_log():
+    print("FILES RECEIVED:", request.files)
+
+    if "logfile" not in request.files:
+        print("No FILE FOUND")
+        return jsonify({"message": "No file uploaded"}), 400
+
+    file = request.files["logfile"]
+    print("FILENAME RECEIVED:", file.filename)
+
+    if file.filename == '':
+        return jsonify({"message": "No file selected"}), 400
+
+    filepath = os.path.join(UPLOAD_FOLDER, file.filename)
+    file.save(filepath)
+    print("FILE SAVED TO:", filepath)
+
+    # Get file stats
+    file_size = os.path.getsize(filepath)
+    file_type = file.filename.split('.')[-1] if '.' in file.filename else 'unknown'
+    
+    # Count records (lines for JSONL/CSV/TXT)
+    records_count = 0
+    try:
+        with open(filepath, 'r', encoding='utf-8') as f:
+            records_count = sum(1 for line in f if line.strip())
+    except Exception as e:
+        print(f"Error counting records: {e}")
+        records_count = 0
+
+    # Load existing metadata
+    files_data = load_metadata()
+    
+    # Create new file metadata
+    file_metadata = {
+        "id": str(len(files_data) + 1),
+        "name": file.filename,
+        "size": file_size,
+        "type": file_type,
+        "uploadDate": datetime.utcnow().isoformat() + "Z",
+        "status": "processed",
+        "recordsCount": records_count,
+        "path": filepath
+    }
+    
+    # Add to list and save
+    files_data.append(file_metadata)
+    save_metadata(files_data)
+    
+    print(f"✅ Metadata saved to {METADATA_FILE}")
+
+    return jsonify({"message": f"File {file.filename} uploaded successfully", "recordsCount": records_count}), 200
+
+
+@app.route("/api/files", methods=["GET"])
+def get_files():
+    """Get list of all uploaded files"""
+    try:
+        files_data = load_metadata()
+        return jsonify(files_data), 200
+    except Exception as e:
+        print(f"Error fetching files: {e}")
+        return jsonify([]), 200
+
+
+@app.route("/api/files/sync", methods=["POST"])
+def sync_files():
+    """Synchronize files from disk with metadata"""
+    try:
+        # Get existing metadata
+        files_data = load_metadata()
+        existing_names = {f["name"] for f in files_data}
+        
+        # Scan directory for files
+        new_files = []
+        for filename in os.listdir(UPLOAD_FOLDER):
+            filepath = os.path.join(UPLOAD_FOLDER, filename)
+            
+            # Skip if not a file or already in metadata
+            if not os.path.isfile(filepath) or filename in existing_names:
+                continue
+            
+            # Get file stats
+            file_size = os.path.getsize(filepath)
+            file_type = filename.split('.')[-1] if '.' in filename else 'unknown'
+            file_mtime = datetime.fromtimestamp(os.path.getmtime(filepath))
+            
+            # Count records
+            records_count = 0
+            try:
+                with open(filepath, 'r', encoding='utf-8') as f:
+                    records_count = sum(1 for line in f if line.strip())
+            except:
+                records_count = 0
+            
+            # Create metadata
+            file_metadata = {
+                "id": str(len(files_data) + len(new_files) + 1),
+                "name": filename,
+                "size": file_size,
+                "type": file_type,
+                "uploadDate": file_mtime.isoformat() + "Z",
+                "status": "processed",
+                "recordsCount": records_count,
+                "path": filepath
+            }
+            
+            new_files.append(file_metadata)
+        
+        # Add new files to metadata and save
+        if new_files:
+            files_data.extend(new_files)
+            save_metadata(files_data)
+            print(f"✅ Synced {len(new_files)} new files")
+        
+        return jsonify({"message": f"Synced {len(new_files)} files", "files": new_files}), 200
+    except Exception as e:
+        print(f"Error syncing files: {e}")
+        return jsonify({"error": str(e)}), 500
+
+
+@app.route("/api/stats", methods=["GET"])
+def get_stats():
+    """Get global statistics"""
+    try:
+        files_data = load_metadata()
+        total_files = len(files_data)
+        total_records = sum(f.get("recordsCount", 0) for f in files_data)
+        
+        # Count by status
+        processed = sum(1 for f in files_data if f.get("status") == "processed")
+        
+        return jsonify({
+            "totalLogs": total_records,
+            "logsToday": 0,
+            "errorLogs": 0,
+            "filesUploaded": total_files,
+            "processingFiles": 0,
+            "processedFiles": processed,
+            "failedFiles": 0
+        }), 200
+    except Exception as e:
+        print(f"Error fetching stats: {e}")
+        return jsonify({
+            "totalLogs": 0,
+            "logsToday": 0,
+            "errorLogs": 0,
+            "filesUploaded": 0,
+            "processingFiles": 0,
+            "processedFiles": 0,
+            "failedFiles": 0
+        }), 200
+
+
+@app.route("/api/hello", methods=["GET"])
+def hello():
+    return jsonify({"message": "Backend Flask OK!"})
+
+if __name__ == "__main__":
+    print("🚀 Flask server starting...")
+    print(f"📁 Upload folder: {UPLOAD_FOLDER}")
+    print(f"📝 Metadata file: {METADATA_FILE}")
+    app.run(host="0.0.0.0", port=5000, debug=True)

@@ -1,0 +1,304 @@
+.upload-container {
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+.header {
+  text-align: center;
+  margin-bottom: 2rem;
+
+  h1 {
+    margin: 0 0 0.5rem;
+    color: #2c3e50;
+    font-size: 2rem;
+  }
+
+  .subtitle {
+    color: #7f8c8d;
+    margin: 0;
+  }
+}
+
+.upload-card {
+  background: white;
+  padding: 2rem;
+  border-radius: 10px;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+  margin-bottom: 2rem;
+}
+
+.drop-zone {
+  border: 3px dashed #bdc3c7;
+  border-radius: 10px;
+  padding: 3rem 2rem;
+  text-align: center;
+  transition: all 0.3s;
+  background: #f8f9fa;
+
+  &.dragging {
+    border-color: #667eea;
+    background: #e3e7ff;
+  }
+
+  &.has-file {
+    border-color: #27ae60;
+    background: #d5f4e6;
+  }
+}
+
+.drop-zone-content {
+  .icon {
+    font-size: 4rem;
+    margin-bottom: 1rem;
+  }
+
+  h3 {
+    margin: 0 0 0.5rem;
+    color: #2c3e50;
+  }
+
+  p {
+    margin: 0.5rem 0;
+    color: #7f8c8d;
+  }
+
+  .info {
+    font-size: 0.85rem;
+    color: #95a5a6;
+    margin-top: 1rem;
+  }
+}
+
+.file-info {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+
+  .file-icon {
+    font-size: 3rem;
+  }
+
+  .file-details {
+    flex: 1;
+
+    h3 {
+      margin: 0 0 0.25rem;
+      color: #2c3e50;
+    }
+
+    p {
+      margin: 0.25rem 0;
+      color: #7f8c8d;
+      font-size: 0.9rem;
+    }
+  }
+
+  .btn-remove {
+    background: #e74c3c;
+    color: white;
+    border: none;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    cursor: pointer;
+    font-size: 1.5rem;
+    transition: all 0.3s;
+
+    &:hover {
+      background: #c0392b;
+      transform: rotate(90deg);
+    }
+  }
+}
+
+.preview-section {
+  margin-top: 2rem;
+
+  h3 {
+    margin: 0 0 1rem;
+    color: #2c3e50;
+  }
+}
+
+.preview-content {
+  background: #2c3e50;
+  color: #ecf0f1;
+  padding: 1rem;
+  border-radius: 5px;
+  max-height: 300px;
+  overflow-y: auto;
+  font-family: 'Courier New', monospace;
+  font-size: 0.85rem;
+}
+
+.preview-line {
+  display: flex;
+  gap: 1rem;
+  padding: 0.25rem 0;
+
+  .line-number {
+    color: #95a5a6;
+    min-width: 30px;
+    text-align: right;
+  }
+
+  .line-content {
+    flex: 1;
+    white-space: pre-wrap;
+    word-break: break-all;
+  }
+}
+
+.progress-section {
+  margin-top: 2rem;
+
+  h3 {
+    margin: 0 0 1rem;
+    color: #2c3e50;
+  }
+
+  p {
+    text-align: center;
+    margin: 0.5rem 0 0;
+    color: #7f8c8d;
+    font-weight: bold;
+  }
+}
+
+.progress-bar {
+  width: 100%;
+  height: 30px;
+  background: #ecf0f1;
+  border-radius: 15px;
+  overflow: hidden;
+}
+
+.progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
+  transition: width 0.3s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-weight: bold;
+}
+
+.message {
+  margin-top: 1rem;
+  padding: 1rem;
+  border-radius: 5px;
+  text-align: center;
+
+  &.success {
+    background: #d4edda;
+    color: #155724;
+    border: 1px solid #c3e6cb;
+  }
+
+  &.error {
+    background: #f8d7da;
+    color: #721c24;
+    border: 1px solid #f5c6cb;
+  }
+
+  p {
+    margin: 0;
+  }
+}
+
+.actions {
+  display: flex;
+  gap: 1rem;
+  margin-top: 2rem;
+  justify-content: center;
+}
+
+.btn {
+  padding: 0.75rem 2rem;
+  border: none;
+  border-radius: 5px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: all 0.3s;
+  font-weight: 600;
+
+  &:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+  }
+}
+
+.btn-primary {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+
+  &:hover:not(:disabled) {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+  }
+}
+
+.btn-success {
+  background: #27ae60;
+  color: white;
+
+  &:hover:not(:disabled) {
+    background: #229954;
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(39, 174, 96, 0.4);
+  }
+}
+
+.btn-secondary {
+  background: #95a5a6;
+  color: white;
+
+  &:hover:not(:disabled) {
+    background: #7f8c8d;
+  }
+}
+
+.instructions {
+  background: white;
+  padding: 2rem;
+  border-radius: 10px;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+
+  h3 {
+    margin: 0 0 1rem;
+    color: #2c3e50;
+  }
+
+  ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+
+    li {
+      padding: 0.5rem 0;
+      color: #2c3e50;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+  }
+}
+
+@media (max-width: 768px) {
+  .upload-card {
+    padding: 1rem;
+  }
+
+  .drop-zone {
+    padding: 2rem 1rem;
+  }
+
+  .actions {
+    flex-direction: column;
+
+    .btn {
+      width: 100%;
+    }
+  }
+}

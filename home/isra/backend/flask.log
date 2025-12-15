@@ -1,0 +1,46 @@
+nohup: les entrées sont ignorées
+🚀 Flask server starting...
+📁 Upload folder: /home/isra/Documents/E-commerce-Project/var/log/ecommerce
+📝 Metadata file: /home/isra/Documents/E-commerce-Project/var/log/files_metadata.json
+🔍 Elasticsearch: http://localhost:9200
+✅ Elasticsearch connected: 8.8.0
+ * Serving Flask app 'app'
+ * Debug mode: on
+[31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:5000
+ * Running on http://192.168.1.158:5000
+[33mPress CTRL+C to quit[0m
+ * Restarting with stat
+ * Debugger is active!
+ * Debugger PIN: 695-248-450
+127.0.0.1 - - [14/Dec/2025 15:49:04] "POST /api/search HTTP/1.1" 200 -
+127.0.0.1 - - [14/Dec/2025 15:50:24] "OPTIONS /api/search HTTP/1.1" 200 -
+127.0.0.1 - - [14/Dec/2025 15:50:24] "POST /api/search HTTP/1.1" 200 -
+127.0.0.1 - - [14/Dec/2025 15:50:44] "OPTIONS /api/search HTTP/1.1" 200 -
+127.0.0.1 - - [14/Dec/2025 15:50:44] "POST /api/search HTTP/1.1" 200 -
+127.0.0.1 - - [14/Dec/2025 15:50:51] "OPTIONS /api/search HTTP/1.1" 200 -
+127.0.0.1 - - [14/Dec/2025 15:50:51] "POST /api/search HTTP/1.1" 200 -
+127.0.0.1 - - [14/Dec/2025 15:50:56] "OPTIONS /api/search HTTP/1.1" 200 -
+127.0.0.1 - - [14/Dec/2025 15:50:56] "POST /api/search HTTP/1.1" 200 -
+127.0.0.1 - - [14/Dec/2025 15:51:02] "OPTIONS /api/search HTTP/1.1" 200 -
+127.0.0.1 - - [14/Dec/2025 15:51:02] "POST /api/search HTTP/1.1" 200 -
+127.0.0.1 - - [14/Dec/2025 15:51:15] "GET /api/files HTTP/1.1" 200 -
+127.0.0.1 - - [14/Dec/2025 15:51:17] "GET /api/hello HTTP/1.1" 200 -
+127.0.0.1 - - [14/Dec/2025 15:51:17] "GET /api/stats HTTP/1.1" 200 -
+/home/isra/Documents/E-commerce-Project/home/isra/backend/app.py:66: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+  "uploadDate": datetime.utcnow().isoformat() + "Z",
+127.0.0.1 - - [14/Dec/2025 15:52:21] "POST /api/upload HTTP/1.1" 200 -
+127.0.0.1 - - [14/Dec/2025 15:52:23] "GET /api/hello HTTP/1.1" 200 -
+127.0.0.1 - - [14/Dec/2025 15:52:23] "GET /api/stats HTTP/1.1" 200 -
+127.0.0.1 - - [14/Dec/2025 15:52:26] "GET /api/hello HTTP/1.1" 200 -
+127.0.0.1 - - [14/Dec/2025 15:52:26] "GET /api/stats HTTP/1.1" 200 -
+127.0.0.1 - - [14/Dec/2025 15:52:30] "GET /api/files HTTP/1.1" 200 -
+127.0.0.1 - - [14/Dec/2025 15:52:33] "GET /api/hello HTTP/1.1" 200 -
+127.0.0.1 - - [14/Dec/2025 15:52:33] "GET /api/stats HTTP/1.1" 200 -
+127.0.0.1 - - [14/Dec/2025 16:50:11] "GET /api/hello HTTP/1.1" 200 -
+127.0.0.1 - - [14/Dec/2025 16:50:11] "GET /api/stats HTTP/1.1" 200 -
+127.0.0.1 - - [14/Dec/2025 16:52:11] "GET /api/hello HTTP/1.1" 200 -
+127.0.0.1 - - [14/Dec/2025 16:52:11] "GET /api/stats HTTP/1.1" 200 -
+127.0.0.1 - - [14/Dec/2025 16:52:35] "GET /api/hello HTTP/1.1" 200 -
+127.0.0.1 - - [14/Dec/2025 16:52:35] "GET /api/stats HTTP/1.1" 200 -

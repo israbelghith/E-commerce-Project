@@ -1,0 +1,200 @@
+<div class="results-container">
+  <div class="header">
+    <h1>📊 Search Results</h1>
+    @if (results()) {
+      <div class="result-count">
+        Found <strong>{{ results()!.total }}</strong> logs
+      </div>
+    }
+  </div>
+
+  @if (loading()) {
+    <div class="loading">
+      <div class="spinner"></div>
+      <p>Loading results...</p>
+    </div>
+  }
+
+  @if (results() && !loading()) {
+    <!-- Actions Bar -->
+    <div class="actions-bar">
+      <button class="btn btn-primary" (click)="newSearch()">
+        🔍 New Search
+      </button>
+      
+      <button class="btn btn-success" (click)="exportResults()" [disabled]="exporting()">
+        {{ exporting() ? '⏳ Exporting...' : '📥 Export CSV' }}
+      </button>
+    </div>
+
+    <!-- Results Table -->
+    <div class="table-container">
+      <table class="results-table">
+        <thead>
+          <tr>
+            <th>Level</th>
+            <th>Date/Time</th>
+            <th>Service</th>
+            <th>Message</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (log of results()!.results; track log.id) {
+            <tr>
+              <td>
+                <span class="level-badge" [class]="getLevelClass(log.level)">
+                  {{ getLevelIcon(log.level) }} {{ log.level }}
+                </span>
+              </td>
+              <td class="date-cell">{{ formatDate(log.timestamp) }}</td>
+              <td>
+                <span class="service-badge">{{ log.service }}</span>
+              </td>
+              <td class="message-cell">{{ log.message }}</td>
+              <td>
+                <button class="btn-details" (click)="viewDetails(log)">
+                  👁️ Details
+                </button>
+              </td>
+            </tr>
+          }
+        </tbody>
+      </table>
+
+      @if (results()!.results.length === 0) {
+        <div class="no-results">
+          <div class="no-results-icon">🔍</div>
+          <h3>No logs found</h3>
+          <p>Try adjusting your search criteria</p>
+          <button class="btn btn-primary" (click)="newSearch()">
+            New Search
+          </button>
+        </div>
+      }
+    </div>
+
+    <!-- Pagination -->
+    @if (results()!.total > results()!.pageSize) {
+      <div class="pagination">
+        <button 
+          class="btn-page"
+          [disabled]="results()!.page === 1"
+          (click)="changePage(results()!.page - 1)">
+          ← Previous
+        </button>
+
+        @for (page of getPageNumbers(); track page) {
+          <button 
+            class="btn-page"
+            [class.active]="page === results()!.page"
+            (click)="changePage(page)">
+            {{ page }}
+          </button>
+        }
+
+        <button 
+          class="btn-page"
+          [disabled]="results()!.page * results()!.pageSize >= results()!.total"
+          (click)="changePage(results()!.page + 1)">
+          Next →
+        </button>
+      </div>
+
+      <div class="pagination-info">
+        Showing {{ (results()!.page - 1) * results()!.pageSize + 1 }} to 
+        {{ getMaxResult() }} 
+        of {{ results()!.total }} results
+      </div>
+    }
+  }
+
+  <!-- Details Modal -->
+  @if (selectedLog()) {
+    <div class="modal-overlay" (click)="closeDetails()">
+      <div class="modal-content" (click)="$event.stopPropagation()">
+        <div class="modal-header">
+          <h2>Log Details</h2>
+          <button class="btn-close" (click)="closeDetails()">✕</button>
+        </div>
+
+        <div class="modal-body">
+          <div class="detail-group">
+            <label>Log ID</label>
+            <div class="detail-value">{{ selectedLog()!.id }}</div>
+          </div>
+
+          <div class="detail-group">
+            <label>Timestamp</label>
+            <div class="detail-value">{{ formatDate(selectedLog()!.timestamp) }}</div>
+          </div>
+
+          <div class="detail-group">
+            <label>Level</label>
+            <div class="detail-value">
+              <span class="level-badge" [class]="getLevelClass(selectedLog()!.level)">
+                {{ getLevelIcon(selectedLog()!.level) }} {{ selectedLog()!.level }}
+              </span>
+            </div>
+          </div>
+
+          <div class="detail-group">
+            <label>Service</label>
+            <div class="detail-value">
+              <span class="service-badge">{{ selectedLog()!.service }}</span>
+            </div>
+          </div>
+
+          <div class="detail-group">
+            <label>Message</label>
+            <div class="detail-value">{{ selectedLog()!.message }}</div>
+          </div>
+
+          @if (selectedLog()!.transaction_id) {
+            <div class="detail-group">
+              <label>Transaction ID</label>
+              <div class="detail-value code">{{ selectedLog()!.transaction_id }}</div>
+            </div>
+          }
+
+          @if (selectedLog()!.user_id) {
+            <div class="detail-group">
+              <label>User ID</label>
+              <div class="detail-value code">{{ selectedLog()!.user_id }}</div>
+            </div>
+          }
+
+          @if (selectedLog()!.amount) {
+            <div class="detail-group">
+              <label>Amount</label>
+              <div class="detail-value">${{ selectedLog()!.amount }}</div>
+            </div>
+          }
+
+          @if (selectedLog()!.payment_method) {
+            <div class="detail-group">
+              <label>Payment Method</label>
+              <div class="detail-value">{{ selectedLog()!.payment_method }}</div>
+            </div>
+          }
+
+          @if (selectedLog()!.error_code) {
+            <div class="detail-group">
+              <label>Error Code</label>
+              <div class="detail-value error">{{ selectedLog()!.error_code }}</div>
+            </div>
+          }
+
+          @if (selectedLog()!.details) {
+            <div class="detail-group">
+              <label>Additional Details</label>
+              <div class="detail-value code">
+                <pre>{{ selectedLog()!.details | json }}</pre>
+              </div>
+            </div>
+          }
+        </div>
+      </div>
+    </div>
+  }
+</div>

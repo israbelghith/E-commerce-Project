@@ -1,0 +1,103 @@
+<div class="upload-container">
+  <div class="header">
+    <h1>📤 Upload Log File</h1>
+    <p class="subtitle">Upload CSV, JSON, or TXT log files for analysis</p>
+  </div>
+
+  <div class="upload-card">
+    <div 
+      class="drop-zone" 
+      [class.dragging]="isDragging()"
+      [class.has-file]="selectedFile()"
+      (dragover)="onDragOver($event)"
+      (dragleave)="onDragLeave($event)"
+      (drop)="onDrop($event)">
+      
+      @if (!selectedFile()) {
+        <div class="drop-zone-content">
+          <div class="icon">📁</div>
+          <h3>Drag & Drop your file here</h3>
+          <p>or</p>
+          <label for="fileInput" class="btn btn-primary">
+            Browse Files
+          </label>
+          <input 
+            type="file" 
+            id="fileInput"
+            (change)="onFileSelected($event)"
+            accept=".csv,.json,.txt,.log,.jsonl,.ndjson"
+            hidden>
+          <p class="info">Supported formats: CSV, JSON, JSONL, TXT, LOG (Max 100 MB)</p>
+        </div>
+      } @else {
+        <div class="file-info">
+          <div class="file-icon">📄</div>
+          <div class="file-details">
+            <h3>{{ selectedFile()!.name }}</h3>
+            <p>Size: {{ (selectedFile()!.size / 1024 / 1024).toFixed(2) }} MB</p>
+            <p>Type: {{ selectedFile()!.type || 'text/plain' }}</p>
+          </div>
+          <button class="btn-remove" (click)="resetForm()">✕</button>
+        </div>
+      }
+    </div>
+
+    @if (preview().length > 0) {
+      <div class="preview-section">
+        <h3>File Preview (First 10 lines)</h3>
+        <div class="preview-content">
+          @for (line of preview(); track $index) {
+            <div class="preview-line">
+              <span class="line-number">{{ $index + 1 }}</span>
+              <span class="line-content">{{ line }}</span>
+            </div>
+          }
+        </div>
+      </div>
+    }
+
+    @if (uploading()) {
+      <div class="progress-section">
+        <h3>Uploading...</h3>
+        <div class="progress-bar">
+          <div class="progress-fill" [style.width.%]="uploadProgress()"></div>
+        </div>
+        <p>{{ uploadProgress() }}%</p>
+      </div>
+    }
+
+    @if (message()) {
+      <div class="message" [class]="messageType()">
+        <p>{{ message() }}</p>
+      </div>
+    }
+
+    <div class="actions">
+      <button 
+        class="btn btn-success" 
+        [disabled]="!selectedFile() || uploading()"
+        (click)="uploadFile()">
+        {{ uploading() ? '⏳ Uploading...' : '✓ Upload File' }}
+      </button>
+      
+      <button 
+        class="btn btn-secondary" 
+        [disabled]="uploading()"
+        (click)="resetForm()">
+        Clear
+      </button>
+    </div>
+  </div>
+
+  <div class="instructions">
+    <h3>📋 Upload Instructions</h3>
+    <ul>
+      <li>✓ Supported formats: CSV, JSON, JSONL (JSON Lines), TXT, LOG</li>
+      <li>✓ Maximum file size: 100 MB</li>
+      <li>✓ JSONL format: One JSON object per line (no need for array brackets)</li>
+      <li>✓ Files are automatically processed by Logstash</li>
+      <li>✓ Indexed data will be searchable within seconds</li>
+      <li>✓ File metadata is stored in MongoDB</li>
+    </ul>
+  </div>
+</div>

@@ -1,0 +1,154 @@
+<div class="search-container">
+  <div class="header">
+    <h1>🔍 Search Logs</h1>
+    <p class="subtitle">Search and filter your e-commerce logs</p>
+  </div>
+
+  <div class="search-card">
+    <form (ngSubmit)="search(); $event.preventDefault()">
+      <!-- Text Search -->
+      <div class="form-group">
+        <label for="queryInput">
+          <strong>Search Query</strong>
+          <span class="label-hint">Free text search (transaction ID, user ID, message...)</span>
+        </label>
+        <input 
+          type="text" 
+          id="queryInput"
+          class="form-control"
+          [value]="searchParams().query"
+          (input)="updateQuery($any($event.target).value)"
+          placeholder="Enter search term...">
+      </div>
+
+      <!-- Filters Row -->
+      <div class="filters-row">
+        <!-- Log Level Filter -->
+        <div class="form-group">
+          <label for="levelSelect">
+            <strong>Log Level</strong>
+          </label>
+          <select 
+            id="levelSelect"
+            class="form-control"
+            [value]="searchParams().level"
+            (change)="updateLevel($any($event.target).value)">
+            @for (level of levels; track level) {
+              <option [value]="level">
+                {{ level || 'All Levels' }}
+              </option>
+            }
+          </select>
+        </div>
+
+        <!-- Service Filter -->
+        <div class="form-group">
+          <label for="serviceSelect">
+            <strong>Service</strong>
+          </label>
+          <select 
+            id="serviceSelect"
+            class="form-control"
+            [value]="searchParams().service"
+            (change)="updateService($any($event.target).value)">
+            @for (service of services; track service) {
+              <option [value]="service">
+                {{ service || 'All Services' }}
+              </option>
+            }
+          </select>
+        </div>
+      </div>
+
+      <!-- Date Range -->
+      <div class="filters-row">
+        <div class="form-group">
+          <label for="dateFrom">
+            <strong>From Date</strong>
+          </label>
+          <input 
+            type="datetime-local" 
+            id="dateFrom"
+            class="form-control"
+            (change)="updateDateFrom($any($event.target).value)">
+        </div>
+
+        <div class="form-group">
+          <label for="dateTo">
+            <strong>To Date</strong>
+          </label>
+          <input 
+            type="datetime-local" 
+            id="dateTo"
+            class="form-control"
+            (change)="updateDateTo($any($event.target).value)">
+        </div>
+      </div>
+
+      <!-- Action Buttons -->
+      <div class="actions">
+        <button 
+          type="submit" 
+          class="btn btn-primary"
+          [disabled]="searching()">
+          {{ searching() ? '⏳ Searching...' : '🔍 Search' }}
+        </button>
+        
+        <button 
+          type="button" 
+          class="btn btn-secondary"
+          (click)="reset()"
+          [disabled]="searching()">
+          🔄 Reset
+        </button>
+      </div>
+    </form>
+  </div>
+
+  <!-- Search History -->
+  @if ((searchHistory$ | async)?.length) {
+    <div class="history-section">
+      <div class="history-header">
+        <h3>📜 Recent Searches</h3>
+        <button class="btn btn-sm btn-danger" (click)="clearHistory()">
+          Clear History
+        </button>
+      </div>
+
+      <div class="history-list">
+        @for (history of (searchHistory$ | async); track $index) {
+          <div class="history-item" (click)="loadFromHistory(history)">
+            <div class="history-content">
+              <div class="history-query">
+                @if (history.query) {
+                  <span class="badge badge-primary">{{ history.query }}</span>
+                }
+                @if (history.level) {
+                  <span class="badge badge-warning">Level: {{ history.level }}</span>
+                }
+                @if (history.service) {
+                  <span class="badge badge-info">Service: {{ history.service }}</span>
+                }
+              </div>
+            </div>
+            <div class="history-action">
+              <span class="btn-reuse">↻ Reuse</span>
+            </div>
+          </div>
+        }
+      </div>
+    </div>
+  }
+
+  <!-- Quick Tips -->
+  <div class="tips-section">
+    <h3>💡 Search Tips</h3>
+    <ul>
+      <li><strong>Free text search:</strong> Search by transaction ID, user ID, error message, or any text</li>
+      <li><strong>Filter by level:</strong> Focus on specific log levels (ERROR, WARNING, etc.)</li>
+      <li><strong>Filter by service:</strong> Narrow down to specific microservices</li>
+      <li><strong>Date range:</strong> Limit search to a specific time period</li>
+      <li><strong>Combine filters:</strong> Use multiple filters together for precise results</li>
+    </ul>
+  </div>
+</div>

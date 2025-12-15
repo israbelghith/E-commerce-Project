@@ -1,0 +1,82 @@
+[
+  {
+    "id": "1",
+    "name": "sample-logs.jsonl",
+    "size": 5002,
+    "type": "jsonl",
+    "uploadDate": "2025-12-12T21:10:27.310195Z",
+    "status": "processed",
+    "recordsCount": 20,
+    "path": "/home/isra/Documents/E-commerce-Project/var/log/ecommerce/sample-logs.jsonl"
+  },
+  {
+    "id": "2",
+    "name": "sample-logs.json",
+    "size": 5002,
+    "type": "json",
+    "uploadDate": "2025-12-12T21:11:35.451448Z",
+    "status": "processed",
+    "recordsCount": 20,
+    "path": "/home/isra/Documents/E-commerce-Project/var/log/ecommerce/sample-logs.json"
+  },
+  {
+    "id": "3",
+    "name": "transactions.txt",
+    "size": 484,
+    "type": "txt",
+    "uploadDate": "2025-12-12T21:12:01.115342Z",
+    "status": "processed",
+    "recordsCount": 3,
+    "path": "/home/isra/Documents/E-commerce-Project/var/log/ecommerce/transactions.txt"
+  },
+  {
+    "id": "4",
+    "name": "transactions.log",
+    "size": 484,
+    "type": "log",
+    "uploadDate": "2025-12-09T09:57:20.468139Z",
+    "status": "processed",
+    "recordsCount": 3,
+    "path": "/home/isra/Documents/E-commerce-Project/var/log/ecommerce/transactions.log"
+  },
+  {
+    "id": "5",
+    "name": "performance_logs.log",
+    "size": 1041,
+    "type": "log",
+    "uploadDate": "2025-12-07T12:17:28.723495Z",
+    "status": "processed",
+    "recordsCount": 11,
+    "path": "/home/isra/Documents/E-commerce-Project/var/log/ecommerce/performance_logs.log"
+  },
+  {
+    "id": "6",
+    "name": "error_logs.log",
+    "size": 1032,
+    "type": "log",
+    "uploadDate": "2025-12-07T12:17:03.218653Z",
+    "status": "processed",
+    "recordsCount": 12,
+    "path": "/home/isra/Documents/E-commerce-Project/var/log/ecommerce/error_logs.log"
+  },
+  {
+    "id": "7",
+    "name": "product_logs.log",
+    "size": 952,
+    "type": "log",
+    "uploadDate": "2025-12-07T12:17:58.032647Z",
+    "status": "processed",
+    "recordsCount": 11,
+    "path": "/home/isra/Documents/E-commerce-Project/var/log/ecommerce/product_logs.log"
+  },
+  {
+    "id": "8",
+    "name": "transactions.txt",
+    "size": 484,
+    "type": "txt",
+    "uploadDate": "2025-12-14T14:52:21.819252Z",
+    "status": "processed",
+    "recordsCount": 3,
+    "path": "/home/isra/Documents/E-commerce-Project/var/log/ecommerce/transactions.txt"
+  }
+]

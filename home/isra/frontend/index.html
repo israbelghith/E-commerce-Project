@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>E-Commerce Monitoring</title>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+</head>
+
+<body>
+    <h1>Dashboard E-Commerce</h1>
+
+    <h3 id="msg">Connecting...</h3>
+
+    <script>
+        axios.get("/api/hello")
+            .then(res => document.getElementById("msg").innerText = res.data.message)
+            .catch(() => document.getElementById("msg").innerText = "Erreur API");
+    </script>
+
+</body>
+</html>

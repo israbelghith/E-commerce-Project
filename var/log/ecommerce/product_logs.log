@@ -1,0 +1,11 @@
+2025-11-24T09:45:12Z INFO PRODUCT_VIEW user_id=427 product_id=P-9921 category=electronics
+2025-11-24T09:45:47Z INFO ADD_TO_CART user_id=427 product_id=P-9921 quantity=1
+2025-11-24T09:46:03Z INFO PRODUCT_STOCK_UPDATE product_id=P-9921 old_qty=52 new_qty=51
+2025-11-24T10:30:22Z ERROR PRODUCT_FETCH_FAIL product_id=P-7719 reason=database_timeout
+2025-11-25T08:30:12Z INFO PRODUCT_VIEW user_id=512 product_id=P-1011 category=fashion
+2025-11-25T08:31:47Z INFO ADD_TO_CART user_id=512 product_id=P-1011 quantity=2
+2025-11-25T09:12:03Z INFO PRODUCT_VIEW user_id=427 product_id=P-9921 category=electronics
+2025-11-25T09:45:23Z INFO REMOVE_FROM_CART user_id=427 product_id=P-9921
+2025-11-26T10:05:12Z INFO PRODUCT_STOCK_UPDATE product_id=P-5521 old_qty=120 new_qty=118
+2025-11-26T10:33:22Z ERROR PRODUCT_FETCH_FAIL product_id=P-7719 reason=invalid_id
+2025-11-27T15:12:44Z INFO PRODUCT_PURCHASE user_id=990 product_id=P-5521 quantity=1 price=89.99 currency=USD

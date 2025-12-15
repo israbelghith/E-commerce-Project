@@ -1,0 +1,3 @@
+{"timestamp":"2025-11-24T10:22:18Z","transaction_id":"TX-9921","user_id":427,"amount":129.99,"currency":"EUR","status":"success","method":"credit_card"}
+{"timestamp":"2025-11-24T10:23:41Z","transaction_id":"TX-9922","user_id":883,"amount":79.00,"currency":"EUR","status":"failed","method":"paypal","reason":"insufficient_funds"}
+{"timestamp":"2025-11-24T10:25:12Z","transaction_id":"TX-9923","user_id":1102,"amount":49.90,"currency":"EUR","status":"refunded","original_tx":"TX-9810"}

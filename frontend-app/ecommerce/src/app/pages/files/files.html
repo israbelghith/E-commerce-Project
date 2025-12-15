@@ -1,0 +1,141 @@
+<div class="files-container">
+  <div class="header">
+    <h1>📁 Uploaded Files</h1>
+    <div class="header-actions">
+      <button class="btn btn-refresh" (click)="refresh()" [disabled]="loading()">
+        {{ loading() ? '🔄 Loading...' : '🔄 Refresh' }}
+      </button>
+      <a routerLink="/upload" class="btn btn-primary">
+        📤 Upload New File
+      </a>
+    </div>
+  </div>
+
+  @if (loading()) {
+    <div class="loading">
+      <div class="spinner"></div>
+      <p>Loading files...</p>
+    </div>
+  }
+
+  @if (error() && !loading()) {
+    <div class="error-message">
+      <p>❌ {{ error() }}</p>
+      <button class="btn btn-primary" (click)="loadFiles()">Retry</button>
+    </div>
+  }
+
+  @if (!loading() && !error()) {
+    @if (files().length === 0) {
+      <div class="no-files">
+        <div class="no-files-icon">📂</div>
+        <h3>No files uploaded yet</h3>
+        <p>Upload your first log file to get started</p>
+        <a routerLink="/upload" class="btn btn-primary">
+          Upload File
+        </a>
+      </div>
+    } @else {
+      <div class="stats-bar">
+        <div class="stat-item">
+          <span class="stat-label">Total Files</span>
+          <span class="stat-value">{{ files().length }}</span>
+        </div>
+        <div class="stat-item">
+          <span class="stat-label">Completed</span>
+          <span class="stat-value success">
+            {{ getCompletedCount() }}
+          </span>
+        </div>
+        <div class="stat-item">
+          <span class="stat-label">Processing</span>
+          <span class="stat-value warning">
+            {{ getProcessingCount() }}
+          </span>
+        </div>
+        <div class="stat-item">
+          <span class="stat-label">Errors</span>
+          <span class="stat-value error">
+            {{ getErrorCount() }}
+          </span>
+        </div>
+      </div>
+
+      <div class="table-container">
+        <table class="files-table">
+          <thead>
+            <tr>
+              <th (click)="sortBy('filename')" class="sortable">
+                Filename
+                @if (sortColumn() === 'filename') {
+                  <span class="sort-icon">
+                    {{ sortDirection() === 'asc' ? '▲' : '▼' }}
+                  </span>
+                }
+              </th>
+              <th (click)="sortBy('uploadDate')" class="sortable">
+                Upload Date
+                @if (sortColumn() === 'uploadDate') {
+                  <span class="sort-icon">
+                    {{ sortDirection() === 'asc' ? '▲' : '▼' }}
+                  </span>
+                }
+              </th>
+              <th (click)="sortBy('size')" class="sortable">
+                Size
+                @if (sortColumn() === 'size') {
+                  <span class="sort-icon">
+                    {{ sortDirection() === 'asc' ? '▲' : '▼' }}
+                  </span>
+                }
+              </th>
+              <th (click)="sortBy('status')" class="sortable">
+                Status
+                @if (sortColumn() === 'status') {
+                  <span class="sort-icon">
+                    {{ sortDirection() === 'asc' ? '▲' : '▼' }}
+                  </span>
+                }
+              </th>
+              <th (click)="sortBy('logsCount')" class="sortable">
+                Logs Count
+                @if (sortColumn() === 'logsCount') {
+                  <span class="sort-icon">
+                    {{ sortDirection() === 'asc' ? '▲' : '▼' }}
+                  </span>
+                }
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+            @for (file of files(); track file.id) {
+              <tr>
+                <td class="filename-cell">
+                  <span class="file-icon">📄</span>
+                  {{ file.filename }}
+                </td>
+                <td class="date-cell">{{ formatDate(file.uploadDate) }}</td>
+                <td>{{ formatBytes(file.size) }}</td>
+                <td>
+                  <span class="status-badge" [class]="getStatusClass(file.status)">
+                    {{ getStatusIcon(file.status) }} {{ file.status | titlecase }}
+                  </span>
+                  @if (file.status === 'error' && file.errorMessage) {
+                    <div class="error-detail">{{ file.errorMessage }}</div>
+                  }
+                </td>
+                <td class="count-cell">
+                  @if (file.status === 'completed') {
+                    <strong>{{ file.logsCount | number }}</strong>
+                  } @else {
+                    <span class="text-muted">-</span>
+                  }
+                </td>
+              </tr>
+            }
+          </tbody>
+        </table>
+      </div>
+    }
+  }
+</div>
