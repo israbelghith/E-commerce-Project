@@ -1,0 +1,34 @@
+# Python
+home/isra/backend/venv/
+__pycache__/
+*.py[cod]
+*.so
+*.egg
+*.egg-info/
+dist/
+build/
+
+# Node.js
+node_modules/
+npm-debug.log*
+frontend-app/ecommerce/node_modules/
+frontend-app/ecommerce/.angular/
+frontend-app/ecommerce/dist/
+
+# IDEs
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+nohup.out
+
+# Environment
+.env
+.env.local
