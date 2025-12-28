@@ -1,154 +1,119 @@
-<div class="search-container">
-  <div class="header">
-    <h1>🔍 Search Logs</h1>
-    <p class="subtitle">Search and filter your e-commerce logs</p>
-  </div>
+<div class="min-h-screen bg-gray-50 p-6">
+  <div class="max-w-4xl mx-auto">
+    <div class="text-center mb-8">
+      <h1 class="text-3xl font-bold text-gray-900 mb-2">🔍 Search Logs</h1>
+      <p class="text-gray-600">Search and filter your e-commerce logs</p>
+    </div>
 
-  <div class="search-card">
-    <form (ngSubmit)="search(); $event.preventDefault()">
-      <!-- Text Search -->
-      <div class="form-group">
-        <label for="queryInput">
-          <strong>Search Query</strong>
-          <span class="label-hint">Free text search (transaction ID, user ID, message...)</span>
-        </label>
-        <input 
-          type="text" 
-          id="queryInput"
-          class="form-control"
-          [value]="searchParams().query"
-          (input)="updateQuery($any($event.target).value)"
-          placeholder="Enter search term...">
-      </div>
+    <div class="bg-white rounded-xl shadow-lg p-8 mb-8">
+      <form (ngSubmit)="search(); $event.preventDefault()">
+        <!-- Text Search field removed -->
 
-      <!-- Filters Row -->
-      <div class="filters-row">
-        <!-- Log Level Filter -->
-        <div class="form-group">
-          <label for="levelSelect">
-            <strong>Log Level</strong>
-          </label>
-          <select 
-            id="levelSelect"
-            class="form-control"
-            [value]="searchParams().level"
-            (change)="updateLevel($any($event.target).value)">
-            @for (level of levels; track level) {
-              <option [value]="level">
-                {{ level || 'All Levels' }}
-              </option>
-            }
-          </select>
+        <!-- Filters Row -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+          <!-- Log Level Filter -->
+          <div>
+            <label for="levelSelect" class="block mb-2">
+              <strong class="block text-gray-900">Log Level</strong>
+            </label>
+            <select 
+              id="levelSelect"
+              class="w-full px-4 py-3 border-2 border-gray-200 rounded-lg focus:outline-none focus:border-primary transition"
+              [value]="searchParams().level"
+              (change)="updateLevel($any($event.target).value)">
+              @for (level of levels; track level) {
+                <option [value]="level">
+                  {{ level || 'All Levels' }}
+                </option>
+              }
+            </select>
+          </div>
         </div>
 
-        <!-- Service Filter -->
-        <div class="form-group">
-          <label for="serviceSelect">
-            <strong>Service</strong>
-          </label>
-          <select 
-            id="serviceSelect"
-            class="form-control"
-            [value]="searchParams().service"
-            (change)="updateService($any($event.target).value)">
-            @for (service of services; track service) {
-              <option [value]="service">
-                {{ service || 'All Services' }}
-              </option>
-            }
-          </select>
-        </div>
-      </div>
+        <!-- Date Range -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+          <div>
+            <label for="dateFrom" class="block mb-2">
+              <strong class="block text-gray-900">From Date</strong>
+            </label>
+            <input 
+              type="datetime-local" 
+              id="dateFrom"
+              class="w-full px-4 py-3 border-2 border-gray-200 rounded-lg focus:outline-none focus:border-primary transition"
+              (change)="updateDateFrom($any($event.target).value)">
+          </div>
 
-      <!-- Date Range -->
-      <div class="filters-row">
-        <div class="form-group">
-          <label for="dateFrom">
-            <strong>From Date</strong>
-          </label>
-          <input 
-            type="datetime-local" 
-            id="dateFrom"
-            class="form-control"
-            (change)="updateDateFrom($any($event.target).value)">
+          <div>
+            <label for="dateTo" class="block mb-2">
+              <strong class="block text-gray-900">To Date</strong>
+            </label>
+            <input 
+              type="datetime-local" 
+              id="dateTo"
+              class="w-full px-4 py-3 border-2 border-gray-200 rounded-lg focus:outline-none focus:border-primary transition"
+              (change)="updateDateTo($any($event.target).value)">
+          </div>
         </div>
 
-        <div class="form-group">
-          <label for="dateTo">
-            <strong>To Date</strong>
-          </label>
-          <input 
-            type="datetime-local" 
-            id="dateTo"
-            class="form-control"
-            (change)="updateDateTo($any($event.target).value)">
+        <!-- Action Buttons -->
+        <div class="flex gap-4 justify-center mt-8">
+          <button 
+            type="submit" 
+            class="px-8 py-3 bg-gradient-to-r from-primary to-secondary text-white rounded-lg hover:-translate-y-0.5 hover:shadow-xl disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-300 font-semibold"
+            [disabled]="searching()">
+            {{ searching() ? '⏳ Searching...' : '🔍 Search' }}
+          </button>
+          
+          <button 
+            type="button" 
+            class="px-8 py-3 bg-gray-500 text-white rounded-lg hover:bg-gray-600 disabled:opacity-50 disabled:cursor-not-allowed transition font-semibold"
+            (click)="reset()"
+            [disabled]="searching()">
+            🔄 Reset
+          </button>
         </div>
-      </div>
+      </form>
+    </div>
 
-      <!-- Action Buttons -->
-      <div class="actions">
-        <button 
-          type="submit" 
-          class="btn btn-primary"
-          [disabled]="searching()">
-          {{ searching() ? '⏳ Searching...' : '🔍 Search' }}
-        </button>
-        
-        <button 
-          type="button" 
-          class="btn btn-secondary"
-          (click)="reset()"
-          [disabled]="searching()">
-          🔄 Reset
-        </button>
-      </div>
-    </form>
-  </div>
+    <!-- Search History -->
+    @if ((searchHistory$ | async)?.length) {
+      <div class="bg-white rounded-xl shadow-lg p-6 mb-8">
+        <div class="flex justify-between items-center mb-4">
+          <h3 class="text-xl font-bold text-gray-900">📜 Recent Searches</h3>
+          <button class="px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600 transition text-sm font-medium" (click)="clearHistory()">
+            Clear History
+          </button>
+        </div>
 
-  <!-- Search History -->
-  @if ((searchHistory$ | async)?.length) {
-    <div class="history-section">
-      <div class="history-header">
-        <h3>📜 Recent Searches</h3>
-        <button class="btn btn-sm btn-danger" (click)="clearHistory()">
-          Clear History
-        </button>
-      </div>
-
-      <div class="history-list">
-        @for (history of (searchHistory$ | async); track $index) {
-          <div class="history-item" (click)="loadFromHistory(history)">
-            <div class="history-content">
-              <div class="history-query">
+        <div class="flex flex-col gap-3">
+          @for (history of (searchHistory$ | async); track $index) {
+            <div class="flex justify-between items-center p-4 bg-gray-50 rounded-lg hover:bg-gray-100 transition cursor-pointer" (click)="loadFromHistory(history)">
+              <div class="flex flex-wrap gap-2">
                 @if (history.query) {
-                  <span class="badge badge-primary">{{ history.query }}</span>
+                  <span class="inline-flex items-center px-3 py-1 bg-blue-100 text-blue-800 rounded-full text-sm font-medium">{{ history.query }}</span>
                 }
                 @if (history.level) {
-                  <span class="badge badge-warning">Level: {{ history.level }}</span>
-                }
-                @if (history.service) {
-                  <span class="badge badge-info">Service: {{ history.service }}</span>
+                  <span class="inline-flex items-center px-3 py-1 bg-yellow-100 text-yellow-800 rounded-full text-sm font-medium">Level: {{ history.level }}</span>
                 }
               </div>
+              <div class="text-gray-600 hover:text-primary transition font-medium">
+                ↻ Reuse
+              </div>
             </div>
-            <div class="history-action">
-              <span class="btn-reuse">↻ Reuse</span>
-            </div>
-          </div>
-        }
+          }
+        </div>
       </div>
-    </div>
-  }
+    }
 
-  <!-- Quick Tips -->
-  <div class="tips-section">
-    <h3>💡 Search Tips</h3>
-    <ul>
-      <li><strong>Free text search:</strong> Search by transaction ID, user ID, error message, or any text</li>
-      <li><strong>Filter by level:</strong> Focus on specific log levels (ERROR, WARNING, etc.)</li>
-      <li><strong>Filter by service:</strong> Narrow down to specific microservices</li>
-      <li><strong>Date range:</strong> Limit search to a specific time period</li>
-      <li><strong>Combine filters:</strong> Use multiple filters together for precise results</li>
-    </ul>
+    <!-- Quick Tips -->
+    <div class="bg-white rounded-xl shadow-lg p-6">
+      <h3 class="text-xl font-bold text-gray-900 mb-4">💡 Search Tips</h3>
+      <ul class="space-y-2 text-gray-700">
+        <li><strong class="text-gray-900">Free text search:</strong> Search by transaction ID, user ID, error message, or any text</li>
+        <li><strong class="text-gray-900">Filter by level:</strong> Focus on specific log levels (ERROR, WARNING, etc.)</li>
+        <li><strong class="text-gray-900">Date range:</strong> Limit search to a specific time period</li>
+        <li><strong class="text-gray-900">Combine filters:</strong> Use multiple filters together for precise results</li>
+      </ul>
+    </div>
   </div>
 </div>

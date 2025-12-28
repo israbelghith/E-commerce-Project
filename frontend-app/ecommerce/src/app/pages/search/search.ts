@@ -10,8 +10,7 @@ import { SearchParams } from '../../models/log.model';
   selector: 'app-search',
   standalone: true,
   imports: [CommonModule, FormsModule],
-  templateUrl: './search.html',
-  styleUrl: './search.scss'
+  templateUrl: './search.html'
 })
 export class Search {
   private apiService = inject(ApiService);
@@ -32,7 +31,6 @@ export class Search {
   searching = signal(false);
   
   levels = ['', 'DEBUG', 'INFO', 'WARNING', 'ERROR', 'CRITICAL'];
-  services = ['', 'payment', 'order', 'user', 'product', 'cart', 'api', 'auth'];
 
   updateQuery(query: string) {
     this.searchParams.update(params => ({ ...params, query }));
@@ -40,10 +38,6 @@ export class Search {
 
   updateLevel(level: string) {
     this.searchParams.update(params => ({ ...params, level }));
-  }
-
-  updateService(service: string) {
-    this.searchParams.update(params => ({ ...params, service }));
   }
 
   updateDateFrom(date: string) {

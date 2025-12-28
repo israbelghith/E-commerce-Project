@@ -2,10 +2,3 @@
 2025-11-24T09:40:22Z INFO API_RESPONSE_TIME endpoint=/api/product latency_ms=420 db_latency_ms=300 cache=miss
 2025-11-24T10:02:05Z INFO SYSTEM_METRICS cpu=72% ram=68% disk_io=120MB/s users_online=1342
 2025-11-24T10:02:44Z WARNING HIGH_LATENCY endpoint=/api/order latency_ms=980
-2025-11-25T08:10:02Z INFO API_RESPONSE_TIME endpoint=/api/search latency_ms=210 db_latency_ms=70 cache=miss
-2025-11-25T08:15:41Z INFO API_RESPONSE_TIME endpoint=/api/product latency_ms=180 db_latency_ms=90 cache=hit
-2025-11-25T08:45:12Z WARNING HIGH_LATENCY endpoint=/api/cart latency_ms=1250
-2025-11-26T10:01:55Z INFO SYSTEM_METRICS cpu=65% ram=72% disk_io=95MB/s users_online=2034
-2025-11-26T10:52:22Z INFO API_RESPONSE_TIME endpoint=/api/order latency_ms=320 db_latency_ms=150 cache=hit
-2025-11-27T12:13:44Z WARNING HIGH_LATENCY endpoint=/api/login latency_ms=980
-2025-11-27T12:27:19Z INFO SYSTEM_METRICS cpu=81% ram=79% disk_io=130MB/s users_online=2891

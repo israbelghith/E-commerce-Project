@@ -140,19 +140,19 @@ def get_stats():
     """Get comprehensive e-commerce statistics from Elasticsearch"""
     try:
         # Get total documents count
-        total_response = es.count(index="ecommerce-*,error-logs,transaction-logs")
+        total_response = es.count(index="ecommerce-logs")
         total_logs = total_response['count']
         
         # Count ERROR level logs
         error_response = es.count(
-            index="ecommerce-*,error-logs,transaction-logs",
+            index="ecommerce-logs",
             body={"query": {"term": {"level.keyword": "ERROR"}}}
         )
         error_logs = error_response['count']
         
         # Get logs from today
         today_response = es.count(
-            index="ecommerce-*,error-logs,transaction-logs",
+            index="ecommerce-logs",
             body={
                 "query": {
                     "range": {
@@ -168,7 +168,7 @@ def get_stats():
         
         # Get transactions per hour (date histogram aggregation)
         transactions_agg = es.search(
-            index="ecommerce-*",
+            index="ecommerce-logs",
             body={
                 "size": 0,
                 "query": {
@@ -202,7 +202,7 @@ def get_stats():
         
         # Get errors by type/reason
         errors_agg = es.search(
-            index="ecommerce-*",
+            index="ecommerce-logs",
             body={
                 "size": 0,
                 "query": {
@@ -230,7 +230,7 @@ def get_stats():
         
         # Calculate average transaction amount
         avg_amount_agg = es.search(
-            index="ecommerce-*",
+            index="ecommerce-logs",
             body={
                 "size": 0,
                 "query": {
@@ -250,12 +250,12 @@ def get_stats():
         
         # Calculate conversion rate (success / total transactions)
         total_transactions = es.count(
-            index="ecommerce-*",
+            index="ecommerce-logs",
             body={"query": {"exists": {"field": "transaction_id"}}}
         )['count']
         
         successful_transactions = es.count(
-            index="ecommerce-*",
+            index="ecommerce-logs",
             body={"query": {"term": {"status.keyword": "success"}}}
         )['count']
         
@@ -305,23 +305,32 @@ def search_logs():
         end_date = data.get('endDate', '')
         page = int(data.get('page', 1))
         page_size = int(data.get('pageSize', 50))
-        
+
         must_clauses = []
-        
+
         if query_text:
             must_clauses.append({
-                "multi_match": {
+                "query_string": {
                     "query": query_text,
-                    "fields": ["message", "transaction_id", "user_id", "reason", "status", "method"]
+                    "fields": [
+                        "message", "transaction_id", "user_id", "event.original", "reason", "status", "method",
+                        "category", "currency", "product_id", "service", "type",
+                        "ip", "brand", "cache", "endpoint", "order_id",
+                        "name", "price", "quantity", "tags", "session_id",
+                        "session_duration", "timeout_ms", "timestamp", "log.file.path",
+                        "results", "original_tx", "duration", "msg", "country",
+                        "username", "users_online"
+                    ],
+                    "default_operator": "AND"
                 }
             })
-        
+
         if level:
             must_clauses.append({"term": {"level.keyword": level}})
-        
+
         if service:
             must_clauses.append({"term": {"service.keyword": service}})
-        
+
         if start_date or end_date:
             date_range = {}
             if start_date:
@@ -331,7 +340,7 @@ def search_logs():
             must_clauses.append({
                 "range": {"@timestamp": date_range}
             })
-        
+
         es_query = {
             "query": {
                 "bool": {
@@ -342,17 +351,17 @@ def search_logs():
             "from": (page - 1) * page_size,
             "size": page_size
         }
-        
+
         print(f"🔍 Executing search query: {json.dumps(es_query, indent=2)}")
-        
+
         response = es.search(
-            index="ecommerce-*,error-logs,transaction-logs",
+            index="ecommerce-logs",
             body=es_query
         )
-        
+
         hits = response['hits']['hits']
         total = response['hits']['total']['value']
-        
+
         results = []
         for hit in hits:
             source = hit['_source']
@@ -372,9 +381,9 @@ def search_logs():
                 'ip': source.get('ip', ''),
                 'details': source
             })
-        
+
         print(f"✅ Found {total} results, returning page {page}")
-        
+
         return jsonify({
             'results': results,
             'total': total,
@@ -382,14 +391,13 @@ def search_logs():
             'pageSize': page_size,
             'totalPages': (total + page_size - 1) // page_size
         }), 200
-        
+
     except Exception as e:
         print(f"❌ Error searching logs: {e}")
         import traceback
         traceback.print_exc()
         return jsonify({'error': str(e), 'results': [], 'total': 0}), 500
-
-
+        
 @app.route("/api/hello", methods=["GET"])
 def hello():
     return jsonify({"message": "Backend Flask OK!"})

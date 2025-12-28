@@ -1,31 +1,42 @@
-<div class="dashboard-container">
-  <div class="header">
-    <h1>📊 Dashboard E-Commerce</h1>
-    <button class="btn btn-refresh" (click)="refresh()" [disabled]="loading()">
-      {{ loading() ? '🔄 Loading...' : '🔄 Refresh' }}
-    </button>
-  </div>
+<div class="min-h-screen bg-gray-50 p-6">
+  <div class="max-w-7xl mx-auto">
+    <div class="flex justify-between items-center mb-8">
+      <h1 class="text-3xl font-bold text-gray-900">📊 Dashboard E-Commerce</h1>
+      <button 
+        class="px-6 py-2 bg-primary text-white rounded-lg hover:bg-blue-700 hover:-translate-y-0.5 hover:shadow-xl disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-300"
+        (click)="refresh()" 
+        [disabled]="loading()">
+        {{ loading() ? '🔄 Loading...' : '🔄 Refresh' }}
+      </button>
+    </div>
 
-  <div class="connection-status" [class.error]="connectionStatus().includes('Error')">
-    <h3 id="msg">{{ connectionStatus() }}</h3>
-  </div>
+    <div 
+      class="mb-6 p-4 rounded-lg transition"
+      [class.bg-red-50]="connectionStatus().includes('Error')"
+      [class.bg-green-50]="!connectionStatus().includes('Error')">
+      <h3 class="text-lg font-medium" [class.text-red-800]="connectionStatus().includes('Error')" [class.text-green-800]="!connectionStatus().includes('Error')">
+        {{ connectionStatus() }}
+      </h3>
+    </div>
 
   @if (loading()) {
-    <div class="loading">
-      <div class="spinner"></div>
-      <p>Loading dashboard data...</p>
+    <div class="flex flex-col items-center justify-center py-12">
+      <div class="animate-spin rounded-full h-16 w-16 border-b-2 border-primary"></div>
+      <p class="mt-4 text-gray-600">Loading dashboard data...</p>
     </div>
   }
 
   @if (error() && !loading()) {
-    <div class="error-message">
-      <p>❌ {{ error() }}</p>
-      <button class="btn btn-primary" (click)="loadStats()">Retry</button>
+    <div class="bg-red-50 border border-red-200 rounded-lg p-6 text-center">
+      <p class="text-red-800 mb-4">❌ {{ error() }}</p>
+      <button class="px-6 py-2 bg-primary text-white rounded-lg hover:bg-blue-700 transition" (click)="loadStats()">
+        Retry
+      </button>
     </div>
   }
 
   @if (stats() && !loading()) {
-    <div class="stats-grid">
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
       <app-stats-card
         title="Total Logs"
         [value]="stats()!.totalLogs"
@@ -59,74 +70,75 @@
       </app-stats-card>
     </div>
 
-    <div class="charts-section">
-      <div class="kibana-dashboard-card">
-        <div class="dashboard-header">
-          <h3>📊 Kibana Analytics Dashboard</h3>
+    <div class="mb-8">
+      <div class="bg-white rounded-xl shadow-lg overflow-hidden">
+        <div class="flex justify-between items-center p-6 bg-gradient-to-r from-primary to-secondary">
+          <h3 class="text-xl font-bold text-white">📊 Kibana Analytics Dashboard</h3>
           <a [href]="'http://localhost:5601/app/dashboards#/view/baed2430-d360-11f0-8cc1-e14176d70d6e'" 
              target="_blank" 
-             class="btn btn-sm btn-secondary">
+             class="px-4 py-2 bg-white text-primary rounded-lg hover:bg-gray-100 transition text-sm font-medium">
             Open in Kibana ↗
           </a>
         </div>
-        <div class="kibana-iframe-container">
+        <div class="h-[800px] bg-gray-50">
           <iframe 
             [src]="kibanaDashboardUrl"
             frameborder="0"
-            class="kibana-iframe">
+            class="w-full h-full">
           </iframe>
         </div>
       </div>
     </div>
 
-    <div class="metrics-section">
-      <div class="metric-card">
-        <h4>Conversion Rate</h4>
-        <p class="metric-value">{{ stats()!.conversionRate }}%</p>
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+      <div class="bg-white rounded-xl shadow-lg p-6">
+        <h4 class="text-gray-600 text-sm font-medium mb-2">Conversion Rate</h4>
+        <p class="text-4xl font-bold text-gray-900">{{ stats()!.conversionRate }}%</p>
       </div>
 
-      <div class="metric-card">
-        <h4>Avg Transaction Amount</h4>
-        <p class="metric-value">${{ stats()!.averageTransactionAmount }}</p>
+      <div class="bg-white rounded-xl shadow-lg p-6">
+        <h4 class="text-gray-600 text-sm font-medium mb-2">Avg Transaction Amount</h4>
+        <p class="text-4xl font-bold text-gray-900">${{ stats()!.averageTransactionAmount }}</p>
       </div>
     </div>
 
-    <div class="quick-actions">
-      <h3>Quick Actions</h3>
-      <div class="action-buttons">
-        <a routerLink="/upload" class="action-btn">
-          <span class="action-icon">📤</span>
-          <span>Upload Logs</span>
+    <div class="bg-white rounded-xl shadow-lg p-6">
+      <h3 class="text-xl font-bold text-gray-900 mb-6">Quick Actions</h3>
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+        <a routerLink="/upload" class="flex items-center gap-4 p-4 bg-gradient-to-r from-blue-50 to-blue-100 rounded-lg hover:shadow-xl hover:-translate-y-1 transition-all duration-300 cursor-pointer">
+          <span class="text-4xl">📤</span>
+          <span class="text-lg font-medium text-gray-900">Upload Logs</span>
         </a>
-        <a routerLink="/search" class="action-btn">
-          <span class="action-icon">🔍</span>
-          <span>Search Logs</span>
+        <a routerLink="/search" class="flex items-center gap-4 p-4 bg-gradient-to-r from-green-50 to-green-100 rounded-lg hover:shadow-xl hover:-translate-y-1 transition-all duration-300 cursor-pointer">
+          <span class="text-4xl">🔍</span>
+          <span class="text-lg font-medium text-gray-900">Search Logs</span>
         </a>
-        <a routerLink="/files" class="action-btn">
-          <span class="action-icon">📋</span>
-          <span>View Files</span>
+        <a routerLink="/files" class="flex items-center gap-4 p-4 bg-gradient-to-r from-purple-50 to-purple-100 rounded-lg hover:shadow-xl hover:-translate-y-1 transition-all duration-300 cursor-pointer">
+          <span class="text-4xl">📋</span>
+          <span class="text-lg font-medium text-gray-900">View Files</span>
         </a>
       </div>
     </div>
   }
 
   @if (!stats() && !loading() && !error()) {
-    <div class="no-backend">
-      <div class="no-backend-icon">🔌</div>
-      <h3>Backend Not Connected</h3>
-      <p>The application frontend is ready, but the backend API is not available.</p>
-      <p>You can explore the interface using the navigation menu.</p>
-      <div class="action-buttons">
-        <a routerLink="/upload" class="btn btn-primary">
+    <div class="flex flex-col items-center justify-center py-16 bg-white rounded-xl shadow-lg">
+      <div class="text-7xl mb-6">🔌</div>
+      <h3 class="text-2xl font-bold text-gray-900 mb-4">Backend Not Connected</h3>
+      <p class="text-gray-600 mb-2">The application frontend is ready, but the backend API is not available.</p>
+      <p class="text-gray-600 mb-8">You can explore the interface using the navigation menu.</p>
+      <div class="flex gap-4">
+        <a routerLink="/upload" class="px-6 py-3 bg-primary text-white rounded-lg hover:bg-blue-700 transition font-medium">
           📤 Upload Page
         </a>
-        <a routerLink="/search" class="btn btn-primary">
+        <a routerLink="/search" class="px-6 py-3 bg-primary text-white rounded-lg hover:bg-blue-700 transition font-medium">
           🔍 Search Page
         </a>
-        <a routerLink="/files" class="btn btn-primary">
+        <a routerLink="/files" class="px-6 py-3 bg-primary text-white rounded-lg hover:bg-blue-700 transition font-medium">
           📋 Files Page
         </a>
       </div>
     </div>
   }
+  </div>
 </div>

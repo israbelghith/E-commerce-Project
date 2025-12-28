@@ -10,8 +10,7 @@ import { Stats } from '../../models/stats.model';
   selector: 'app-home',
   standalone: true,
   imports: [CommonModule, RouterLink, StatsCardComponent],
-  templateUrl: './home.html',
-  styleUrl: './home.scss'
+  templateUrl: './home.html'
 })
 export class Home implements OnInit {
   private apiService = inject(ApiService);
@@ -27,8 +26,8 @@ export class Home implements OnInit {
   kibanaDashboardUrl: SafeResourceUrl;
 
   constructor() {
-    // Sanitize the Kibana dashboard URL
-    const dashboardUrl = 'http://localhost:5601/app/dashboards#/view/baed2430-d360-11f0-8cc1-e14176d70d6e?embed=true&_g=(filters:!(),refreshInterval:(pause:!t,value:60000),time:(from:now-3w,to:now))';
+    // Sanitize the Kibana dashboard URL - 5 weeks time range
+    const dashboardUrl = 'http://localhost:5601/app/dashboards#/view/baed2430-d360-11f0-8cc1-e14176d70d6e?embed=true&_g=(filters:!(),refreshInterval:(pause:!t,value:60000),time:(from:now-5w,to:now))';
     this.kibanaDashboardUrl = this.sanitizer.bypassSecurityTrustResourceUrl(dashboardUrl);
   }
 

@@ -22,9 +22,7 @@
         🔍 New Search
       </button>
       
-      <button class="btn btn-success" (click)="exportResults()" [disabled]="exporting()">
-        {{ exporting() ? '⏳ Exporting...' : '📥 Export CSV' }}
-      </button>
+      <!-- Export CSV button removed -->
     </div>
 
     <!-- Results Table -->
@@ -34,7 +32,7 @@
           <tr>
             <th>Level</th>
             <th>Date/Time</th>
-            <th>Service</th>
+            <!-- Service column removed -->
             <th>Message</th>
             <th>Actions</th>
           </tr>
@@ -48,9 +46,7 @@
                 </span>
               </td>
               <td class="date-cell">{{ formatDate(log.timestamp) }}</td>
-              <td>
-                <span class="service-badge">{{ log.service }}</span>
-              </td>
+              <!-- Service cell removed -->
               <td class="message-cell">{{ log.message }}</td>
               <td>
                 <button class="btn-details" (click)="viewDetails(log)">
@@ -138,12 +134,7 @@
             </div>
           </div>
 
-          <div class="detail-group">
-            <label>Service</label>
-            <div class="detail-value">
-              <span class="service-badge">{{ selectedLog()!.service }}</span>
-            </div>
-          </div>
+          <!-- Service detail removed -->
 
           <div class="detail-group">
             <label>Message</label>

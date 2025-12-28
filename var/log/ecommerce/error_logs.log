@@ -2,12 +2,3 @@
 2025-11-24T09:54:33Z ERROR DATABASE_TIMEOUT query=SELECT * FROM orders timeout_ms=3000
 2025-11-24T10:20:12Z WARNING PAGE_NOT_FOUND url=/products/unknown product_id=null
 2025-11-24T10:25:44Z CRITICAL SERVICE_DOWN name=inventory_service duration=35s
-2025-11-25T08:12:03Z ERROR API_CALL_FAILED endpoint=/api/login status=401 msg="Invalid credentials"
-2025-11-25T08:15:42Z WARNING RATE_LIMIT_EXCEEDED ip=192.168.1.55 limit=100 req/min
-2025-11-25T09:02:10Z ERROR DATABASE_DEADLOCK table=orders transaction_id=78421
-2025-11-25T09:30:45Z CRITICAL SERVICE_DOWN name=payment_gateway duration=12s
-2025-11-26T11:15:22Z WARNING CACHE_MISS key=product_8821
-2025-11-26T11:17:55Z ERROR API_CALL_FAILED endpoint=/api/order status=503 msg="Upstream timeout"
-2025-11-26T12:02:33Z ERROR DATABASE_TIMEOUT query=INSERT INTO carts timeout_ms=4000
-2025-11-27T14:21:09Z ERROR JS_RUNTIME_ERROR file=checkout.js line=221 msg="Undefined cart object"
-
