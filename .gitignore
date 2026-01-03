@@ -32,3 +32,4 @@ nohup.out
 # Environment
 .env
 .env.local
+home/isra/elk/mongo-data/
