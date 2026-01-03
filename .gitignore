@@ -1,4 +1,5 @@
 # Python
+venv/
 home/isra/backend/venv/
 __pycache__/
 *.py[cod]
@@ -33,3 +34,7 @@ nohup.out
 .env
 .env.local
 home/isra/elk/mongo-data/
+
+# Dynamic data files
+var/log/ecommerce/
+var/log/files_metadata.json
