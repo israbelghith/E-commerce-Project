@@ -73,8 +73,8 @@
     <div class="mb-8">
       <div class="bg-white rounded-xl shadow-lg overflow-hidden">
         <div class="flex justify-between items-center p-6 bg-gradient-to-r from-primary to-secondary">
-          <h3 class="text-xl font-bold text-white">📊 Kibana Analytics Dashboard</h3>
-          <a [href]="'http://localhost:5601/app/dashboards#/view/baed2430-d360-11f0-8cc1-e14176d70d6e'" 
+          <h3 class="text-xl font-bold text-white">📊 Kibana Analytics Dashboard - Last 7 Days</h3>
+          <a [href]="'http://localhost:5601/app/dashboards#/view/7632fcc0-e576-11f0-bd25-4dc5af6de36c?_g=(filters:!(),refreshInterval:(pause:!t,value:60000),time:(from:now-7d,to:now))'" 
              target="_blank" 
              class="px-4 py-2 bg-white text-primary rounded-lg hover:bg-gray-100 transition text-sm font-medium">
             Open in Kibana ↗
@@ -99,6 +99,25 @@
       <div class="bg-white rounded-xl shadow-lg p-6">
         <h4 class="text-gray-600 text-sm font-medium mb-2">Avg Transaction Amount</h4>
         <p class="text-4xl font-bold text-gray-900">${{ stats()!.averageTransactionAmount }}</p>
+      </div>
+    </div>
+
+    <!-- Charts Section -->
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
+      <!-- Transactions Chart -->
+      <div class="bg-white rounded-xl shadow-lg p-6">
+        <h3 class="text-xl font-bold text-gray-900 mb-4">📈 Transactions par heure (24h)</h3>
+        <div class="h-[300px]">
+          <canvas #transactionsChart></canvas>
+        </div>
+      </div>
+
+      <!-- Errors Chart -->
+      <div class="bg-white rounded-xl shadow-lg p-6">
+        <h3 class="text-xl font-bold text-gray-900 mb-4">🔴 Répartition des erreurs par type</h3>
+        <div class="h-[300px]">
+          <canvas #errorsChart></canvas>
+        </div>
       </div>
     </div>
 

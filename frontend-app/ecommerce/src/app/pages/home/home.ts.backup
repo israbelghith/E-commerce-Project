@@ -1,4 +1,4 @@
-import { Component, OnInit, inject, signal, PLATFORM_ID, ViewChild, ElementRef, AfterViewInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, inject, signal, PLATFORM_ID, ViewChild, ElementRef, AfterViewInit } from '@angular/core';
 import { CommonModule, isPlatformBrowser } from '@angular/common';
 import { RouterLink } from '@angular/router';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
@@ -16,7 +16,7 @@ Chart.register(...registerables);
   imports: [CommonModule, RouterLink, StatsCardComponent],
   templateUrl: './home.html'
 })
-export class Home implements OnInit, AfterViewInit, OnDestroy {
+export class Home implements OnInit, AfterViewInit {
   private apiService = inject(ApiService);
   private platformId = inject(PLATFORM_ID);
   private sanitizer = inject(DomSanitizer);
@@ -36,12 +36,13 @@ export class Home implements OnInit, AfterViewInit, OnDestroy {
   kibanaDashboardUrl: SafeResourceUrl;
 
   constructor() {
-    // Dashboard avec plage temporelle de la dernière semaine (7 derniers jours) en mode embed
-    const dashboardUrl = 'http://localhost:5601/app/dashboards#/view/7632fcc0-e576-11f0-bd25-4dc5af6de36c?embed=true&_g=(filters:!(),refreshInterval:(pause:!t,value:60000),time:(from:now-7d,to:now))&hide-filter-bar=true';
+    // Sanitize the Kibana dashboard URL - 5 weeks time range
+    const dashboardUrl = 'http://localhost:5601/app/dashboards#/view/baed2430-d360-11f0-8cc1-e14176d70d6e?embed=true&_g=(filters:!(),refreshInterval:(pause:!t,value:60000),time:(from:now-5w,to:now))';
     this.kibanaDashboardUrl = this.sanitizer.bypassSecurityTrustResourceUrl(dashboardUrl);
   }
 
   ngOnInit() {
+    // Only make API calls in the browser, not during SSR
     if (isPlatformBrowser(this.platformId)) {
       this.loadStats();
       this.checkHealth();
@@ -61,7 +62,7 @@ export class Home implements OnInit, AfterViewInit, OnDestroy {
       next: (data) => {
         this.stats.set(data);
         this.loading.set(false);
-        console.log('Stats loaded:', data);
+        // Create charts after stats are loaded
         setTimeout(() => this.createCharts(), 100);
       },
       error: (err) => {
@@ -89,24 +90,49 @@ export class Home implements OnInit, AfterViewInit, OnDestroy {
   }
 
   createCharts() {
-    if (!isPlatformBrowser(this.platformId)) return;
-    const stats = this.stats();
-    if (!stats) return;
+    if (!isPlatformBrowser(this.platformId)) {
+      console.log('⚠️ Not in browser, skipping charts');
+      return;
+    }
     
-    console.log('Creating charts...', stats);
+    const stats = this.stats();
+    if (!stats) {
+      console.log('⚠️ No stats available');
+      return;
+    }
+
+    console.log('✅ Creating charts with stats:', stats);
+    console.log('📊 Transactions data:', stats.transactionsPerHour);
+    console.log('📊 Errors data:', stats.errorsByType);
+    
     this.createTransactionsChart(stats);
     this.createErrorsChart(stats);
   }
 
   createTransactionsChart(stats: Stats) {
-    if (!this.transactionsChartRef) return;
-    if (this.transactionsChart) this.transactionsChart.destroy();
+    console.log('📈 Creating transactions chart...');
+    
+    if (!this.transactionsChartRef) {
+      console.log('⚠️ transactionsChartRef is not available');
+      return;
+    }
+    
+    // Destroy existing chart
+    if (this.transactionsChart) {
+      this.transactionsChart.destroy();
+    }
 
     const ctx = this.transactionsChartRef.nativeElement.getContext('2d');
-    if (!ctx) return;
+    if (!ctx) {
+      console.log('⚠️ Cannot get 2d context');
+      return;
+    }
 
     const labels = stats.transactionsPerHour.map(t => t.label);
     const data = stats.transactionsPerHour.map(t => t.value);
+    
+    console.log('📊 Transactions labels:', labels);
+    console.log('📊 Transactions data:', data);
 
     const config: ChartConfiguration = {
       type: 'line',
@@ -127,22 +153,55 @@ export class Home implements OnInit, AfterViewInit, OnDestroy {
         responsive: true,
         maintainAspectRatio: false,
         plugins: {
-          legend: { display: true, position: 'top' },
-          tooltip: { mode: 'index', intersect: false }
+          legend: {
+            display: true,
+            position: 'top'
+          },
+          tooltip: {
+            mode: 'index',
+            intersect: false
+          }
         },
         scales: {
-          y: { beginAtZero: true, title: { display: true, text: 'Nombre de transactions' } },
-          x: { title: { display: true, text: 'Heure' } }
+          y: {
+            beginAtZero: true,
+            title: {
+              display: true,
+              text: 'Nombre de transactions'
+            }
+          },
+          x: {
+            title: {
+              display: true,
+              text: 'Heure'
+            }
+          }
         }
       }
     };
 
     this.transactionsChart = new Chart(ctx, config);
+    console.log('✅ Transactions chart created successfully');
   }
 
   createErrorsChart(stats: Stats) {
-    if (!this.errorsChartRef) return;
-    if (this.errorsChart) this.errorsChart.destroy();
+    console.log('🔴 Creating errors chart...');
+    
+    if (!this.errorsChartRef) {
+      console.log('⚠️ errorsChartRef is not available');
+      return;
+    }
+    
+    // Destroy{
+      console.log('⚠️ Cannot get 2d context for errors chart');
+      return;
+    }
+
+    const labels = stats.errorsByType.map(e => e.label);
+    const data = stats.errorsByType.map(e => e.value);
+    
+    console.log('📊 Errors labels:', labels);
+    console.log('📊 Errors data:', data
 
     const ctx = this.errorsChartRef.nativeElement.getContext('2d');
     if (!ctx) return;
@@ -157,12 +216,18 @@ export class Home implements OnInit, AfterViewInit, OnDestroy {
         datasets: [{
           data: data,
           backgroundColor: [
-            'rgba(239, 68, 68, 0.8)', 'rgba(251, 146, 60, 0.8)', 'rgba(234, 179, 8, 0.8)',
-            'rgba(59, 130, 246, 0.8)', 'rgba(139, 92, 246, 0.8)'
+            'rgba(239, 68, 68, 0.8)',
+            'rgba(251, 146, 60, 0.8)',
+            'rgba(234, 179, 8, 0.8)',
+            'rgba(59, 130, 246, 0.8)',
+            'rgba(139, 92, 246, 0.8)'
           ],
           borderColor: [
-            'rgb(239, 68, 68)', 'rgb(251, 146, 60)', 'rgb(234, 179, 8)',
-            'rgb(59, 130, 246)', 'rgb(139, 92, 246)'
+            'rgb(239, 68, 68)',
+            'rgb(251, 146, 60)',
+            'rgb(234, 179, 8)',
+            'rgb(59, 130, 246)',
+            'rgb(139, 92, 246)'
           ],
           borderWidth: 2
         }]
@@ -171,17 +236,24 @@ export class Home implements OnInit, AfterViewInit, OnDestroy {
         responsive: true,
         maintainAspectRatio: false,
         plugins: {
-          legend: { display: true, position: 'right' },
+          legend: {
+            display: true,
+            position: 'right'
+          },
           tooltip: {
             callbacks: {
               label: (context: any) => {
                 const label = context.label || '';
                 const value = context.parsed || 0;
-                const total = context.dataset.data.reduce((sum: number, val: any) => sum + (typeof val === 'number' ? val : 0), 0);
+                const dataset = context.dataset;
+                const total = dataset.data.reduce((sum: number, val: any) => {
+                  return sum + (typeof val === 'number' ? val : 0);
+                }, 0);
                 const percentage = total > 0 ? ((value / total) * 100).toFixed(1) : '0';
                 return `${label}: ${value} (${percentage}%)`;
               }
             }
+    console.log('✅ Errors chart created successfully');
           }
         }
       }
@@ -191,7 +263,11 @@ export class Home implements OnInit, AfterViewInit, OnDestroy {
   }
 
   ngOnDestroy() {
-    if (this.transactionsChart) this.transactionsChart.destroy();
-    if (this.errorsChart) this.errorsChart.destroy();
+    if (this.transactionsChart) {
+      this.transactionsChart.destroy();
+    }
+    if (this.errorsChart) {
+      this.errorsChart.destroy();
+    }
   }
 }

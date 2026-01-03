@@ -40,6 +40,10 @@ export class Search {
     this.searchParams.update(params => ({ ...params, level }));
   }
 
+  updateService(service: string) {
+    this.searchParams.update(params => ({ ...params, service }));
+  }
+
   updateDateFrom(date: string) {
     this.searchParams.update(params => ({ 
       ...params, 

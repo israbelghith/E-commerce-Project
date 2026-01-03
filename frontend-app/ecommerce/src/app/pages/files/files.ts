@@ -72,6 +72,8 @@ export class Files implements OnInit {
   }
 
   getStatusClass(status: string): string {
+    // Treat 'processed' as 'completed' for UI
+    if (status === 'processed') status = 'completed';
     const classes: Record<string, string> = {
       'pending': 'status-pending',
       'processing': 'status-processing',
@@ -82,6 +84,8 @@ export class Files implements OnInit {
   }
 
   getStatusIcon(status: string): string {
+    // Treat 'processed' as 'completed' for UI
+    if (status === 'processed') status = 'completed';
     const icons: Record<string, string> = {
       'pending': '⏳',
       'processing': '⚙️',
@@ -110,7 +114,8 @@ export class Files implements OnInit {
   }
 
   getCompletedCount(): number {
-    return this.files().filter(f => f.status === 'completed').length;
+    // Treat 'processed' as 'completed'
+    return this.files().filter(f => f.status === 'completed' || f.status === 'processed').length;
   }
 
   getProcessingCount(): number {

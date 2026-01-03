@@ -18,11 +18,24 @@
   @if (results() && !loading()) {
     <!-- Actions Bar -->
     <div class="actions-bar">
-      <button class="btn btn-primary" (click)="newSearch()">
-        🔍 New Search
-      </button>
+      <div class="flex gap-2">
+        <button class="btn btn-primary" (click)="newSearch()">
+          🔍 New Search
+        </button>
+        
+        <button 
+          class="btn btn-success" 
+          (click)="exportResults()"
+          [disabled]="exporting() || results()!.total === 0">
+          {{ exporting() ? '⏳ Exporting...' : '📥 Export CSV (' + results()!.total + ' logs)' }}
+        </button>
+      </div>
       
-      <!-- Export CSV button removed -->
+      @if (results()!.total > 0) {
+        <div class="text-sm text-gray-600">
+          💡 Export limited to 10,000 results
+        </div>
+      }
     </div>
 
     <!-- Results Table -->
@@ -32,8 +45,9 @@
           <tr>
             <th>Level</th>
             <th>Date/Time</th>
-            <!-- Service column removed -->
+            <th>Service</th>
             <th>Message</th>
+            <th>Transaction ID</th>
             <th>Actions</th>
           </tr>
         </thead>
@@ -46,8 +60,15 @@
                 </span>
               </td>
               <td class="date-cell">{{ formatDate(log.timestamp) }}</td>
-              <!-- Service cell removed -->
+              <td class="service-cell">
+                <span class="badge badge-service">{{ log.service || 'N/A' }}</span>
+              </td>
               <td class="message-cell">{{ log.message }}</td>
+              <td class="transaction-cell">
+                @if (log.transaction_id) {
+                  <code class="text-xs">{{ log.transaction_id }}</code>
+                }
+              </td>
               <td>
                 <button class="btn-details" (click)="viewDetails(log)">
                   👁️ Details

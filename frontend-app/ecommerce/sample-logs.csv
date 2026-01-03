@@ -1,0 +1,7 @@
+timestamp,level,event,customer_id,name,email,country,registration_date,total_orders,lifetime_value
+2025-12-30T08:00:00Z,INFO,CUSTOMER_REGISTERED,C-3001,Anna Müller,anna.mueller@email.com,Germany,2025-12-30,0,0.00
+2025-12-30T08:15:00Z,INFO,CUSTOMER_UPDATED,C-3002,John Smith,john.smith@email.com,UK,2025-11-10,2,210.50
+2025-12-30T08:30:00Z,INFO,CUSTOMER_VERIFIED,C-3003,Emma Dubois,emma.dubois@email.com,France,2025-12-28,1,99.99
+2025-12-30T08:45:00Z,WARNING,CUSTOMER_SUSPENDED,C-3004,Pedro Garcia,pedro.garcia@email.com,Spain,2025-10-15,5,400.00
+2025-12-30T09:00:00Z,INFO,CUSTOMER_LOGGED_IN,C-3001,Anna Müller,anna.mueller@email.com,Germany,2025-12-30,1,149.99
+2025-12-30T09:15:00Z,ERROR,CUSTOMER_PAYMENT_FAILED,C-3005,Sofia Rossi,sofia.rossi@email.com,Italy,2025-09-20,3,250.75

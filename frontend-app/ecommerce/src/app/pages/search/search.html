@@ -7,7 +7,20 @@
 
     <div class="bg-white rounded-xl shadow-lg p-8 mb-8">
       <form (ngSubmit)="search(); $event.preventDefault()">
-        <!-- Text Search field removed -->
+        <!-- Text Search -->
+        <div class="mb-6">
+          <label for="queryInput" class="block mb-2">
+            <strong class="block text-gray-900">Search Query</strong>
+            <span class="text-gray-600 text-sm">Search by transaction ID, message, user ID, or any keyword</span>
+          </label>
+          <input 
+            type="text" 
+            id="queryInput"
+            placeholder="e.g., TX-50001, payment failed, user_1234..."
+            class="w-full px-4 py-3 border-2 border-gray-200 rounded-lg focus:outline-none focus:border-primary transition"
+            [value]="searchParams().query"
+            (input)="updateQuery($any($event.target).value)">
+        </div>
 
         <!-- Filters Row -->
         <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
@@ -26,6 +39,27 @@
                   {{ level || 'All Levels' }}
                 </option>
               }
+            </select>
+          </div>
+
+          <!-- Service Filter -->
+          <div>
+            <label for="serviceSelect" class="block mb-2">
+              <strong class="block text-gray-900">Service</strong>
+            </label>
+            <select 
+              id="serviceSelect"
+              class="w-full px-4 py-3 border-2 border-gray-200 rounded-lg focus:outline-none focus:border-primary transition"
+              [value]="searchParams().service"
+              (change)="updateService($any($event.target).value)">
+              <option value="">All Services</option>
+              <option value="payment-gateway">Payment Gateway</option>
+              <option value="fraud-detection">Fraud Detection</option>
+              <option value="refund-service">Refund Service</option>
+              <option value="order-service">Order Service</option>
+              <option value="inventory-service">Inventory Service</option>
+              <option value="api-gateway">API Gateway</option>
+              <option value="database">Database</option>
             </select>
           </div>
         </div>
