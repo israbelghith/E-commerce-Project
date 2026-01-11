@@ -5,7 +5,7 @@
 - **Auteur**: Israa Belghith
 - **Date**: Novembre 2025 -> Janvier 2026
 - **Contexte**: Mini-Projet - Monitoring et Analyse de Logs
-- **Scénario**: A - Plateforme E-Commerce
+
 
 ## 📋 Table des Matières
 
