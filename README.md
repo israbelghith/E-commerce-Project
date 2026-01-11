@@ -41,9 +41,7 @@ Ce projet implémente un système complet de monitoring et d'analyse de logs pou
 
 ### Architecture Globale
 ![Architecture](screenshots/archi_global.PNG)
-```
 
-```
 
 ### Stack Technique
 
