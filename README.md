@@ -42,27 +42,7 @@ Ce projet implémente un système complet de monitoring et d'analyse de logs pou
 ### Architecture Globale
 
 ```
-┌─────────────────────────────────────────────────────────────┐
-│                     Frontend (Angular 21)                    │
-│                    http://localhost:4200                     │
-└──────────────────────────┬──────────────────────────────────┘
-                           │ HTTP/REST API
-┌──────────────────────────▼──────────────────────────────────┐
-│                    Backend (Flask 3.0.0)                     │
-│                    http://localhost:5000                     │
-└─┬────────────┬────────────┬──────────────┬──────────────────┘
-  │            │            │              │
-  │ Port 9200  │ Port 27017 │ Port 6379    │ Port 5044
-  │            │            │              │
-┌─▼────┐  ┌───▼───┐  ┌────▼────┐  ┌──────▼──────┐
-│ Elast│  │ Mongo │  │  Redis  │  │  Logstash   │
-│search│  │  DB   │  │  Cache  │  │  Pipeline   │
-└──┬───┘  └───────┘  └─────────┘  └─────────────┘
-   │ Port 5601
-┌──▼────────────┐
-│    Kibana     │
-│  Dashboards   │
-└───────────────┘
+![Architecture](screenshots/archi global.PNG)
 ```
 
 ### Stack Technique
@@ -447,6 +427,7 @@ Response: 200 OK - [{"filename": "...", "size": 1024}]
 - Dashboard Kibana intégré (4 visualisations)
 - 2 graphiques Chart.js (Transactions, Erreurs)
 - 3 boutons Quick Actions
+- ![Dashboard](screenshots/dashboard.PNG)
 
 ### 2. Page Upload
 - Zone drag & drop
@@ -454,6 +435,7 @@ Response: 200 OK - [{"filename": "...", "size": 1024}]
 - Preview des données
 - Barre de progression
 - Message de succès
+- ![Upload](screenshots/upload.PNG)
 
 ### 3. Page Search
 - Champ de recherche textuelle
@@ -461,6 +443,7 @@ Response: 200 OK - [{"filename": "...", "size": 1024}]
 - Dropdown Service (7 options)
 - Date range picker (From/To)
 - Bouton Search
+- ![Search](screenshots/search.PNG)
 
 ### 4. Page Results
 - Table avec 6 colonnes
@@ -468,12 +451,14 @@ Response: 200 OK - [{"filename": "...", "size": 1024}]
 - Transaction ID en monospace
 - Bouton Export CSV avec compteur
 - Pagination
+- ![Result](screenshots/result.PNG)
 
 ### 5. Page Files
 - Liste des fichiers uploadés
 - Icônes par type (CSV, JSON, TXT)
 - Métadonnées (taille, date, lignes)
 - Cartes responsive
+- ![File](screenshots/files.PNG)
 
 ### 6. Dashboard Kibana
 - Transactions par heure (7 jours)
