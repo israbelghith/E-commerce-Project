@@ -39,7 +39,6 @@ Ce projet implémente un système complet de monitoring et d'analyse de logs pou
 
 ## 🏗️ Architecture
 
-### Architecture Globale
 ![Architecture](screenshots/archi_global.PNG)
 
 
