@@ -2,8 +2,8 @@
 
 ## 👨‍💻 Informations du Projet
 
-- **Auteur**: Isra
-- **Date**: Janvier 2026
+- **Auteur**: Israa Belghith
+- **Date**: Novembre 2025 -> Janvier 2026
 - **Contexte**: Mini-Projet - Monitoring et Analyse de Logs
 - **Scénario**: A - Plateforme E-Commerce
 
@@ -316,7 +316,7 @@ E-commerce-Project/
 - [x] Installation et configuration Logstash 8.8.0
 - [x] Installation et configuration Kibana 8.8.0
 - [x] Docker Compose avec 7 services
-- [x] Indexation de 917 logs dans `ecommerce-logs`
+- [x] Indexation des logs dans `ecommerce-logs`
 - [x] Pipeline Logstash fonctionnel
 - [x] MongoDB pour métadonnées
 - [x] Redis pour cache
@@ -381,9 +381,7 @@ Services:
 ### Tests fonctionnels réalisés
 
 #### 1. Upload de fichiers ✅
-- [x] Upload CSV (customers_data.csv) - 153 lignes
-- [x] Upload JSON (products_inventory.json) - 50 objets
-- [x] Upload TXT (security_events.txt) - 100 lignes
+- [x] Upload CSV, TXT, JSON
 - [x] Validation taille < 10MB
 - [x] Preview des 10 premières lignes
 - [x] Barre de progression fonctionnelle
@@ -404,17 +402,15 @@ Services:
 - [x] Mode embed sans barre de filtrage
 
 #### 4. Export CSV ✅
-- [x] Export de 917 logs
+- [x] Export des logs
 - [x] Format CSV valide
-- [x] 10 colonnes exportées
 - [x] Nom de fichier avec timestamp
-- [x] Limite 10,000 logs respectée
 
 #### 5. Performance ✅
 - [x] Temps de chargement homepage: < 2s
 - [x] Recherche: < 200ms (avec cache)
 - [x] Upload fichier 1MB: < 3s
-- [x] Génération CSV: < 1s pour 917 logs
+
 
 ### Endpoints API testés
 
@@ -472,10 +468,9 @@ Response: 200 OK - [{"filename": "...", "size": 1024}]
 - Transaction ID en monospace
 - Bouton Export CSV avec compteur
 - Pagination
-- Modal de détails
 
 ### 5. Page Files
-- Liste des 6 fichiers uploadés
+- Liste des fichiers uploadés
 - Icônes par type (CSV, JSON, TXT)
 - Métadonnées (taille, date, lignes)
 - Cartes responsive
@@ -542,54 +537,7 @@ output {
 }
 ```
 
----
 
-## 📊 Métriques du Projet
-
-### Volumétrie
-- **Logs indexés**: 917
-- **Fichiers traités**: 6
-- **Visualisations**: 6 (4 Kibana + 2 Chart.js)
-- **Endpoints API**: 6
-- **Pages frontend**: 5
-- **Composants Angular**: 8
-
-### Performance
-- **Temps recherche**: < 200ms (avec cache Redis)
-- **Temps indexation**: ~2s pour 150 logs
-- **Temps export CSV**: < 1s pour 917 logs
-- **Temps chargement page**: < 2s
-
-### Code
-- **Lignes de code Backend**: ~535 (app.py)
-- **Lignes de code Frontend**: ~2000+ (TypeScript + HTML + SCSS)
-- **Services Docker**: 7
-- **Dépendances npm**: 45+
-- **Dépendances pip**: 15+
-
----
-
-## 🎯 Évaluation et Points
-
-### Note estimée: **16/20**
-
-| Module | Points max | Points obtenus | Détails |
-|--------|-----------|----------------|---------|
-| Module 1 - Stack ELK | 12 | 12 | ✅ Stack complète fonctionnelle |
-| Module 2 - Kibana | 12 | 12 | ✅ Dashboard + 4 visualisations |
-| Module 3 - Frontend | 4 | 4 | ✅ Chart.js, Export, Filtres |
-| **Bonus** | | | |
-| Documentation | +1 | +1 | ✅ README complet |
-| Interface UI/UX | +1 | +1 | ✅ Design moderne Tailwind |
-| **Total** | **20** | **16** | **Excellent** |
-
-### Critères d'excellence atteints
-- ✅ Architecture microservices avec Docker
-- ✅ Code structuré et commenté
-- ✅ Interface moderne et responsive
-- ✅ Fonctionnalités avancées (cache, export, filtres)
-- ✅ Documentation technique complète
-- ✅ Tests fonctionnels validés
 
 ---
 
@@ -669,8 +617,7 @@ docker-compose up -d kibana
 ## 📞 Contact
 
 Pour toute question ou suggestion :
-- Email: [votre-email]
-- GitHub: [votre-github]
+- Email: belghithisraa@gmail.com
 
 ---
 
